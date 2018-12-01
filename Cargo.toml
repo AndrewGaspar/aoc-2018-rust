@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "advent-day-1-puzzle-1",
-    "advent-day-1-puzzle-2",
+    "day-1-puzzle-1",
+    "day-1-puzzle-2",
 ]
