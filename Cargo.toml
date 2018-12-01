@@ -1,0 +1,4 @@
+[workspace]
+members = [
+    "advent-day-1-puzzle-1"
+]
