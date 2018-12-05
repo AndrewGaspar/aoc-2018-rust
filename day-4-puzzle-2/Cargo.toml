@@ -1,5 +1,5 @@
 [package]
-name = "sleepiest-guard"
+name = "consistent-guard"
 version = "0.1.0"
 authors = ["Andrew Gaspar <andrew.gaspar@outlook.com>"]
 edition = "2018"
