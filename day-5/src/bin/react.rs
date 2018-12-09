@@ -1,11 +1,7 @@
 use std::io::{prelude::*, BufReader};
 
-use rayon::prelude::*;
-
-const chars_dist: u8 = b'a' - b'A';
-
 fn test_reaction(a: u8, b: u8) -> bool {
-    (if b > a { b - a } else { a - b }) == chars_dist
+    (if b > a { b - a } else { a - b }) == (b'a' - b'A')
 }
 
 fn get_reactions(polymer: &[u8], reactions: &mut Vec<usize>) -> bool {
@@ -82,13 +78,13 @@ fn react_par(polymer: &mut [u8]) -> usize {
     left_range.end -= split_reactions;
     right_range.start += split_reactions;
 
-    let (left_reactions, right_reactions) = rayon::join(
+    let (left_len, right_len) = rayon::join(
         || react_par(&mut left[left_range.clone()]),
         || react_par(&mut right[right_range.clone()]),
     );
 
-    left_range.end -= left_reactions;
-    right_range.end -= right_reactions;
+    left_range.end = left_range.start + left_len;
+    right_range.end = right_range.start + right_len;
 
     let split_reactions = react_splits(&left[left_range.clone()], &right[right_range.clone()]);
     left_range.end -= split_reactions;
@@ -99,7 +95,7 @@ fn react_par(polymer: &mut [u8]) -> usize {
 
     past_left.rotate_left(gap_space);
 
-    0
+    left_range.count() + right_range.count()
 }
 
 fn main() {
@@ -115,18 +111,14 @@ fn main() {
     };
 
     let mut polymer = Default::default();
-    reader.read_to_end(&mut polymer).unwrap();
+    reader.read_to_string(&mut polymer).unwrap();
+    let polymer = polymer.trim();
 
-    // mask off EOF
-    let len = polymer.len() - 1;
-    let polymer = &mut polymer[..len];
+    let mut polymer = Vec::from(polymer.as_bytes());
+    assert!(polymer
+        .iter()
+        .cloned()
+        .all(|c| (c >= b'a' && c <= b'z') || (c >= b'A' && c <= b'Z')));
 
-    let polymer_length = react(&mut polymer[..]);
-
-    println!(
-        "{}",
-        String::from_utf8(polymer[..polymer_length].to_owned())
-            .unwrap()
-            .len()
-    );
+    println!("{}", react_par(&mut polymer[..]));
 }
