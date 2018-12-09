@@ -1,5 +1,5 @@
 [package]
-name = "day-5"
+name = "day-6"
 version = "0.1.0"
 authors = ["Andrew Gaspar <andrew.gaspar@outlook.com>"]
 edition = "2018"
@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 clap = "2.32"
 rayon = "1.0"
+ndarray = "0.12.1"
