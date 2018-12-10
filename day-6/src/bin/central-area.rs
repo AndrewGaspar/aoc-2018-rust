@@ -4,9 +4,6 @@ use std::io::{prelude::*, BufReader};
 use day_6::Point;
 use rayon::prelude::*;
 
-use ndarray::prelude::*;
-use ndarray_parallel::prelude::*;
-
 fn main() {
     let matches = clap::App::new("max-finite-area")
         .arg(clap::Arg::with_name("input").required(false))
