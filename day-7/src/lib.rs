@@ -26,4 +26,6 @@ pub struct Task {
     pub dependencies: Vec<u8>,
     pub dependents: Vec<u8>,
     pub incomplete: bool,
+    pub in_progress: bool,
+    pub remaining_time: u8,
 }
