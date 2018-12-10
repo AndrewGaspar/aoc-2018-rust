@@ -77,8 +77,6 @@ fn main() {
             tasks[*task_idx as usize].in_progress = true;
         }
 
-        println!("Startings tasks: {:?}", in_progress);
-
         assert!(!in_progress.is_empty());
 
         // figure out which task is closest to being completed
@@ -110,8 +108,6 @@ fn main() {
 
         // Remove completed tasks
         for task_idx in &completed {
-            println!("{} completing...", *task_idx);
-
             for dependent in &tasks[*task_idx as usize].dependents {
                 let remove_at = tasks[*dependent as usize]
                     .dependencies
@@ -119,8 +115,6 @@ fn main() {
                     .expect("Task dependency wasn't recorded");
                 removals.push((*dependent, remove_at));
             }
-
-            println!("{} completed!", *task_idx);
         }
 
         for removal in &removals {
