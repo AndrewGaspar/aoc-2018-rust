@@ -1,5 +1,6 @@
-use std::collections::VecDeque;
 use std::io::{prelude::*, BufReader};
+
+use rayon::prelude::*;
 
 #[derive(Clone, Debug)]
 pub struct Node {
@@ -54,6 +55,31 @@ impl NodeTree {
         }
 
         NodeTree { nodes }
+    }
+
+    pub fn node_value(&self, i: u32) -> u32 {
+        if self.nodes[i as usize].children.is_empty() {
+            self.nodes[i as usize]
+                .metadata
+                .iter()
+                .cloned()
+                .map(|i| i as u32)
+                .sum()
+        } else {
+            self.nodes[i as usize]
+                .metadata
+                .par_iter()
+                .map(|m| {
+                    let m = m - 1;
+                    let node = &self.nodes[i as usize];
+                    if (m as usize) < node.children.len() {
+                        self.node_value(node.children[m as usize] as u32)
+                    } else {
+                        0
+                    }
+                })
+                .sum()
+        }
     }
 }
 
